@@ -1,0 +1,6 @@
+# TUMonline --> Google Calendar Converter
+# Copyright 2011 by Janosch Maier
+# Licensed under EUPL V.1.1
+DirectoryIndex index.php
+RewriteEngine on
+RewriteRule ^(.*),(.*),(.*).ics$ http://phynformatik.de/calendar-lmu/calendar.php?username=$1&password=$2&semester=$3 [L]
