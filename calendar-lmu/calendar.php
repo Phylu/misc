@@ -36,14 +36,20 @@ if (isset($_GET['username']) and isset($_GET['password']) and isset($_GET['semes
 
     $store = curl_exec($curl);
 
+
     // Change semester
-    if ($semester == "2013-2") {
-        $semesterUrl = "https://lsf.verwaltung.uni-muenchen.de/qisserver/rds?state=user&type=0&k_semester.semid=20132&idcol=k_semester.semid&idval=20132&purge=n&getglobal=semester&text=Wintersemester+2013%2F2014";
-    } elseif ($semester == "2014-1") {
-        $semesterUrl = "https://lsf.verwaltung.uni-muenchen.de/qisserver/rds?state=user&type=0&k_semester.semid=20141&idcol=k_semester.semid&idval=20141&purge=n&getglobal=semester&text=Sommersemester+2014";
-    } elseif ($semester == "2014-2") {
-        $semesterUrl = "https://lsf.verwaltung.uni-muenchen.de/qisserver/rds?state=user&type=0&k_semester.semid=20142&idcol=k_semester.semid&idval=20142&purge=n&getglobal=semester&text=Wintersemester+2014%2F2015";
-     }
+    $semesterParts = explode('-', $semester);
+    $semesterId = $semesterParts[0] . $semesterParts[1];
+    
+    if ($semesterParts[1] == 1) {
+         $semesterName = "Sommersemester+$semesterParts[0]";
+    } else {
+         $nextYear = $semesterParts[0] + 1;
+         $semesterName = "Wintersemester+$semesterParts[0]%2F$nextYear";
+    }
+
+    $semesterUrl = "https://lsf.verwaltung.uni-muenchen.de/qisserver/rds?state=user&type=0&k_semester.semid=$semesterId&idcol=k_semester.semid&idval=$semesterId&purge=n&getglobal=semester&text=$semesterName";
+    
     curl_setopt($curl, CURLOPT_URL, $semesterUrl);
     $change_semester = curl_exec($curl);
 
